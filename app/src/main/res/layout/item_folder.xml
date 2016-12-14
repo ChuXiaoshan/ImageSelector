@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bean"
+            type="com.cxsplay.imageselect.bean.FolderBean"/>
+
+        <variable
+            name="handler"
+            type="com.cxsplay.imageselect.FolderAdapter.FolderItemHandler"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/item_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:gravity="center_horizontal"
+        android:onClick="@{handler::viewClick}">
+
+        <ImageView
+            android:id="@+id/iv_item_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="16dp"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            app:errorDrawable="@{@drawable/ic_broken_image_black_24dp}"
+            app:imageUrl='@{bean.firstImagePath}'
+            app:placeHolder="@{@drawable/ic_insert_photo_black_24dp}"/>
+
+        <TextView
+            android:id="@+id/tv_file_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="16sp"
+            android:text='@={bean.count + ""}'
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_folder_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_item_image"
+            android:text="@={bean.name}"
+            android:textColor="@color/colorAccent"
+            android:textSize="16dp"/>
+
+    </RelativeLayout>
+
+</layout>
