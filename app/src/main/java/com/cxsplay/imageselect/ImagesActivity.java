@@ -3,6 +3,7 @@ package com.cxsplay.imageselect;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -37,6 +38,10 @@ public class ImagesActivity extends AppCompatActivity {
 
     public static final int RQ_PERMISSION_WRITE_EXTERNAL_STORAGE = 0x000;
 
+    public static final String SELECT_TYPE = "select_type";
+
+    public static final String RETURN_KEY = "return_key";
+
     private static final int DATA_LOADED = 0x001;
 
     private ProgressDialog progressDialog;
@@ -52,6 +57,8 @@ public class ImagesActivity extends AppCompatActivity {
     private AcImagesBean imagesBean;
 
     private ImageAdapter adapter;
+
+    private int selectType = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -81,13 +88,17 @@ public class ImagesActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        selectType = getIntent().getIntExtra(SELECT_TYPE, 0);
+
         listAllImage = new ArrayList<>();
         listFolder = new ArrayList<>();
         adapter = new ImageAdapter(ImagesActivity.this);
         bind.rvBillingRecord.setAdapter(adapter);
         adapter.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
-            public void onImageViewClick() {
+            public void onImageViewClick(String path) {
+                finishType1(path);
                 Toast.makeText(ImagesActivity.this, "onImageViewClick", Toast.LENGTH_SHORT).show();
             }
 
@@ -96,6 +107,18 @@ public class ImagesActivity extends AppCompatActivity {
                 Toast.makeText(ImagesActivity.this, "onImageButtonClick", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 返回一张图片路径
+     *
+     * @param path 图片路径
+     */
+    private void finishType1(String path) {
+        Intent intent = new Intent();
+        intent.putExtra(RETURN_KEY, path);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     /**

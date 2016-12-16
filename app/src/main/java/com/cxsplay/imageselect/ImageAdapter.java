@@ -20,7 +20,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     private OnItemClickListener mListener;
 
-
     private LayoutInflater mInflater;
 
     private List<String> mImgPaths;
@@ -51,7 +50,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bind.setPath(folderPath + "/" + mImgPaths.get(position));
+        String path = folderPath + "/" + mImgPaths.get(position);
+        holder.bind.setPath(path);
+        holder.bind.ivItemImage.setTag(R.id.single_path_key, path);
     }
 
     @Override
@@ -84,7 +85,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
         public void imageViewClick(View v) {
             if (mListener != null) {
-                mListener.onImageViewClick();
+                String path = (String) v.getTag(R.id.single_path_key);
+                mListener.onImageViewClick(path);
             }
         }
 
@@ -96,7 +98,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
     }
 
     interface OnItemClickListener {
-        void onImageViewClick();
+        void onImageViewClick(String str);
 
         void onImageButtonClick();
     }
