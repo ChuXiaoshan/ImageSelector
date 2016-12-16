@@ -45,13 +45,13 @@ public class ImagesActivity extends AppCompatActivity {
 
     private ActivityImagesBinding bind;
 
-    private AcImagesBean imagesBean;
+    private BottomPopFolder bpFragment;
 
     private List<String> listAllImage;
 
-    private ImageAdapter adapter;
+    private AcImagesBean imagesBean;
 
-    private BottomPopFolder bpFragment;
+    private ImageAdapter adapter;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -192,7 +192,7 @@ public class ImagesActivity extends AppCompatActivity {
     }
 
     private void initBottomPop() {
-        bpFragment = new BottomPopFolder(listFolder);
+        bpFragment = new BottomPopFolder(listFolder, listAllImage.size());
         bpFragment.setOnFolderItemClickListener(
                 new BottomPopFolder.OnFolderItemClickListener() {
                     @Override
@@ -208,9 +208,12 @@ public class ImagesActivity extends AppCompatActivity {
                         }));
                         refreshData(listImage, file.getAbsolutePath(), folderBean.getName());
                         bpFragment.dismiss();
+                    }
 
-                        File[] files = file.listFiles();
-                        System.out.println("----->" + files[0].getAbsolutePath());
+                    @Override
+                    public void headerViewClick() {
+                        refreshData(listAllImage, "", "所有图片");
+                        bpFragment.dismiss();
                     }
                 }
         );

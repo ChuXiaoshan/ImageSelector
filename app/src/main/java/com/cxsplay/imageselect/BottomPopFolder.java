@@ -9,7 +9,6 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cxsplay.imageselect.bean.FolderBean;
 import com.cxsplay.imageselect.databinding.BottomSheetLayoutBinding;
@@ -25,15 +24,18 @@ public class BottomPopFolder extends BottomSheetDialogFragment {
 
     private OnFolderItemClickListener listener;
 
-    private BottomSheetLayoutBinding bind;
+    public BottomSheetLayoutBinding bind;
 
     private List<FolderBean> listFolder;
+
+    private int allImageCount;
 
     public BottomPopFolder() {
     }
 
     @SuppressLint("ValidFragment")
-    public BottomPopFolder(List<FolderBean> listFolder) {
+    public BottomPopFolder(List<FolderBean> listFolder, int allImageCount) {
+        this.allImageCount = allImageCount;
         this.listFolder = listFolder;
     }
 
@@ -76,6 +78,7 @@ public class BottomPopFolder extends BottomSheetDialogFragment {
     private void initData() {
         FolderAdapter adapter = new FolderAdapter(getContext(), listFolder);
         bind.rvFolder.setAdapter(adapter);
+        bind.tvAllImageCount.setText(allImageCount + "");
         adapter.setOnItemClickListener(new FolderAdapter.OnItemClickListener() {
             @Override
             public void onViewClick(FolderBean folderBean) {
@@ -83,12 +86,21 @@ public class BottomPopFolder extends BottomSheetDialogFragment {
                     return;
                 }
                 listener.folderItemClick(folderBean);
-                Toast.makeText(getContext(), "dddd" + folderBean.getDir(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        bind.rlAllImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.headerViewClick();
+                }
             }
         });
     }
 
     public interface OnFolderItemClickListener {
         void folderItemClick(FolderBean folderBean);
+
+        void headerViewClick();
     }
 }
