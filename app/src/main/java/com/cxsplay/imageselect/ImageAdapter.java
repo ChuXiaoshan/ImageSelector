@@ -3,6 +3,7 @@ package com.cxsplay.imageselect;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,26 +23,34 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     private LayoutInflater mInflater;
 
+    private List<String> selectedImages;
+
     private List<String> mImgPaths;
 
     private String folderPath;
 
+    private String path;
+
     private int screenWidth;
 
-    ImageAdapter(Context context) {
+    private int selectType;
+
+    ImageAdapter(Context context, int selectType) {
         mInflater = LayoutInflater.from(context);
+        this.selectType = selectType;
         screenWidth = context.getResources().getDisplayMetrics().widthPixels;
     }
 
-    public void setData(List<String> listImage, String folderPath) {
+    void setData(List<String> listImage, List<String> selectedImages, String folderPath) {
         this.mImgPaths = listImage;
+        this.selectedImages = selectedImages;
         this.folderPath = folderPath;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_rv, parent, false);
-        return new MyViewHolder(view, mListener);
+        return new MyViewHolder(view);
     }
 
     void setOnItemClickListener(OnItemClickListener listener) {
@@ -50,9 +59,21 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String path = folderPath + "/" + mImgPaths.get(position);
+        String path;
+        if (TextUtils.isEmpty(folderPath)) {
+            path = mImgPaths.get(position);
+        } else {
+            path = folderPath + "/" + mImgPaths.get(position);
+        }
+        this.path = path;
+        if (selectedImages.contains(path)) {
+            holder.bind.cbImage.setChecked(true);
+        } else {
+            holder.bind.cbImage.setChecked(false);
+        }
         holder.bind.setPath(path);
         holder.bind.ivItemImage.setTag(R.id.single_path_key, path);
+        holder.bind.cbImage.setTag(R.id.single_path_key, path);
     }
 
     @Override
@@ -64,10 +85,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
         ItemRvBinding bind;
 
-        MyViewHolder(View itemView, OnItemClickListener listener) {
+        MyViewHolder(View itemView) {
             super(itemView);
             bind = DataBindingUtil.bind(itemView);
-            bind.setHandler(new ItemHandler(listener));
+            bind.setHandler(new ItemHandler());
+            if (selectType == 0) {
+                bind.cbImage.setVisibility(View.GONE);
+            }
+            bind.setPath(path);
             ViewGroup.LayoutParams layoutParams = bind.ivItemImage.getLayoutParams();
             layoutParams.width = screenWidth / 3;
             layoutParams.height = screenWidth / 3;
@@ -77,12 +102,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     public class ItemHandler {
 
-        OnItemClickListener mListener;
-
-        ItemHandler(OnItemClickListener listener) {
-            this.mListener = listener;
-        }
-
         public void imageViewClick(View v) {
             if (mListener != null) {
                 String path = (String) v.getTag(R.id.single_path_key);
@@ -90,9 +109,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
             }
         }
 
-        public void imageBtnClick(View v) {
+        public void checkBoxClick(View v) {
             if (mListener != null) {
-                mListener.onImageButtonClick();
+                String path = (String) v.getTag(R.id.single_path_key);
+                mListener.onCheckBoxClick(v, path);
             }
         }
     }
@@ -100,6 +120,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
     interface OnItemClickListener {
         void onImageViewClick(String str);
 
-        void onImageButtonClick();
+        void onCheckBoxClick(View v, String path);
     }
 }

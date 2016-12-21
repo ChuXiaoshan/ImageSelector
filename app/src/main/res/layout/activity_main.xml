@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="handler"
-            type="com.cxsplay.imageselect.MainActivity.MainHandler"/>
+            type="com.cxsplay.imageselect.demo.MainActivity.MainHandler"/>
     </data>
 
     <RelativeLayout
@@ -26,6 +27,15 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerInParent="true"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_select_images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            app:layoutManager="GridLayoutManager"
+            app:spanCount="3"/>
 
     </RelativeLayout>
 

@@ -14,17 +14,41 @@
             type="com.cxsplay.imageselect.ImagesActivity.ImagesHandler"/>
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal">
 
-        <include
-            layout="@layout/toolbar"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="end"
+            android:layout_marginRight="16dp">
+
+            <TextView
+                android:id="@+id/tv_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="?android:selectableItemBackground"
+                android:onClick="@{handler::okClick}"
+                android:padding="6dp"
+                android:text="确定"
+                android:textColor="@color/grey500"/>
+        </RelativeLayout>
+
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_billing_record"
+            android:id="@+id/rv_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
@@ -35,7 +59,7 @@
             android:id="@+id/rl_image_bottom"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:background="#ee000000"
             android:clickable="true"
             android:onClick="@{handler::showBottomPop}"
@@ -63,6 +87,6 @@
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </FrameLayout>
 
 </layout>

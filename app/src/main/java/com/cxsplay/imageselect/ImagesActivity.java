@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.cxsplay.imageselect.bean.AcImagesBean;
@@ -38,27 +39,39 @@ public class ImagesActivity extends AppCompatActivity {
 
     public static final int RQ_PERMISSION_WRITE_EXTERNAL_STORAGE = 0x000;
 
+    public static final String SELECT_LIMIT = "select_limit";
+
     public static final String SELECT_TYPE = "select_type";
 
     public static final String RETURN_KEY = "return_key";
 
     private static final int DATA_LOADED = 0x001;
 
-    private ProgressDialog progressDialog;
+    public static final int TYPE_SINGLE = 0;
+
+    public static final int TYPE_MULIT = 1;
+
+    public static final int TYPE_CROP = 2;
+
+    private int selectLimit = 9;
+
+    private int type = 0;
+
+    private ArrayList<String> selectedImages;
 
     private List<FolderBean> listFolder;
+
+    private List<String> listAllImage;
+
+    private ProgressDialog progressDialog;
 
     private ActivityImagesBinding bind;
 
     private BottomPopFolder bpFragment;
 
-    private List<String> listAllImage;
-
     private AcImagesBean imagesBean;
 
     private ImageAdapter adapter;
-
-    private int selectType = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -89,22 +102,46 @@ public class ImagesActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        selectType = getIntent().getIntExtra(SELECT_TYPE, 0);
+        type = getIntent().getIntExtra(SELECT_TYPE, 0);
+        if (type == TYPE_SINGLE) {
+            bind.tvOk.setVisibility(View.GONE);
+        }
 
         listAllImage = new ArrayList<>();
         listFolder = new ArrayList<>();
-        adapter = new ImageAdapter(ImagesActivity.this);
-        bind.rvBillingRecord.setAdapter(adapter);
+        selectedImages = new ArrayList<>();
+        adapter = new ImageAdapter(ImagesActivity.this, type);
+        bind.rvImages.setAdapter(adapter);
         adapter.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
             public void onImageViewClick(String path) {
-                finishType1(path);
+                finishType(path);
                 Toast.makeText(ImagesActivity.this, "onImageViewClick", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onImageButtonClick() {
-                Toast.makeText(ImagesActivity.this, "onImageButtonClick", Toast.LENGTH_SHORT).show();
+            public void onCheckBoxClick(View v, String path) {
+                CheckBox cb = (CheckBox) v;
+                if (selectedImages.contains(path)) {
+                    cb.setChecked(false);
+                    selectedImages.remove(path);
+                    if (selectedImages.size() == 0) {
+                        bind.tvOk.setTextColor(ContextCompat.getColor(ImagesActivity.this, R.color.grey500));
+                        bind.tvOk.setClickable(false);
+                    }
+                    bind.tvOk.setText("确定(" + selectedImages.size() + ")");
+                } else {
+                    if (selectedImages.size() < selectLimit) {
+                        selectedImages.add(path);
+                        bind.tvOk.setText("确定(" + selectedImages.size() + ")");
+                        bind.tvOk.setTextColor(ContextCompat.getColor(ImagesActivity.this, R.color.grey200));
+                        bind.tvOk.setClickable(true);
+                        cb.setChecked(true);
+                    } else {
+                        cb.setChecked(false);
+                        Toast.makeText(ImagesActivity.this, "你最多只能选择" + selectLimit + "张图片。", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
@@ -114,9 +151,13 @@ public class ImagesActivity extends AppCompatActivity {
      *
      * @param path 图片路径
      */
-    private void finishType1(String path) {
+    private void finishType(String path) {
         Intent intent = new Intent();
-        intent.putExtra(RETURN_KEY, path);
+        if (type == TYPE_SINGLE) {
+            intent.putExtra(RETURN_KEY, path);
+        } else if (type == TYPE_MULIT) {
+            intent.putStringArrayListExtra(RETURN_KEY, selectedImages);
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -147,7 +188,6 @@ public class ImagesActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     finish();
                 }
-
             }
         }
     }
@@ -250,7 +290,7 @@ public class ImagesActivity extends AppCompatActivity {
      * @param folderName folderName
      */
     public void refreshData(List<String> list, String folderPath, String folderName) {
-        adapter.setData(list, folderPath);
+        adapter.setData(list, selectedImages, folderPath);
         adapter.notifyDataSetChanged();
         imagesBean.setItemCount(list.size());
         imagesBean.setCurrentFolderName(folderName);
@@ -274,6 +314,10 @@ public class ImagesActivity extends AppCompatActivity {
                 initBottomPop();
             }
             bpFragment.show(getSupportFragmentManager(), bpFragment.getTag());
+        }
+
+        public void okClick(View v) {
+            finishType("");
         }
     }
 }

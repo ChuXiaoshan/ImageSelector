@@ -31,17 +31,13 @@
             app:imageUrl='@{path}'
             app:placeHolder="@{@drawable/ic_insert_photo_black_24dp}"/>
 
-        <ImageButton
+        <CheckBox
+            android:id="@+id/cb_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@null"
-            android:clickable="false"
-            android:onClick="@{handler::imageBtnClick}"
-            android:padding="4dp"
-            android:src="@drawable/ic_check_circle_black"
-            android:tint="@android:color/white"/>
+            android:onClick="@{handler::checkBoxClick}"/>
 
     </RelativeLayout>
 
