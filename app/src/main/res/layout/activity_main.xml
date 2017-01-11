@@ -16,11 +16,27 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/btn_image_select"
+            android:id="@+id/btn_single_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{handler::imageSelect}"
-            android:text="选择图片"/>
+            android:onClick="@{handler::imageSingle}"
+            android:text="选择单张图片"/>
+
+        <Button
+            android:id="@+id/btn_mulit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_single_image"
+            android:onClick="@{handler::imageMulit}"
+            android:text="选择多张图片"/>
+
+        <Button
+            android:id="@+id/btn_crop_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_mulit_image"
+            android:onClick="@{handler::imageCrop}"
+            android:text="选择裁剪图片"/>
 
         <ImageView
             android:id="@+id/iv_show1"
@@ -31,9 +47,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_select_images"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             app:layoutManager="GridLayoutManager"
             app:spanCount="3"/>
 

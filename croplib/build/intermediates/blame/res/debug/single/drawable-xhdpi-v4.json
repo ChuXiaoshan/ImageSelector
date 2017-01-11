@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/build/intermediates/res/merged/debug/drawable-xhdpi-v4/crop__ic_done.png",
+        "source": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/src/main/res/drawable-xhdpi/crop__ic_done.png"
+    },
+    {
+        "merged": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/build/intermediates/res/merged/debug/drawable-xhdpi-v4/crop__ic_cancel.png",
+        "source": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/src/main/res/drawable-xhdpi/crop__ic_cancel.png"
+    },
+    {
+        "merged": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/build/intermediates/res/merged/debug/drawable-xhdpi-v4/crop__tile.png",
+        "source": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/src/main/res/drawable-xhdpi/crop__tile.png"
+    },
+    {
+        "merged": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/build/intermediates/res/merged/debug/drawable-xhdpi-v4/crop__divider.9.png",
+        "source": "/Users/chuxiaoshan/AndroidStudioProjects/ImageSelect/croplib/src/main/res/drawable-xhdpi/crop__divider.9.png"
+    }
+]

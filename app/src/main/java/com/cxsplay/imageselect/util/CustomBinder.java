@@ -2,6 +2,7 @@ package com.cxsplay.imageselect.util;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,17 @@ public class CustomBinder {
     public static void loadImage(ImageView iv, String url, Drawable holder, Drawable error) {
         Glide.with(iv.getContext())
                 .load(url)
+                .crossFade()
+                .error(error)
+                .centerCrop()
+                .placeholder(holder)
+                .into(iv);
+    }
+
+    @BindingAdapter({"imageUrl", "placeHolder", "errorDrawable"})
+    public static void loadImage(ImageView iv, Uri uri, Drawable holder, Drawable error) {
+        Glide.with(iv.getContext())
+                .load(uri)
                 .crossFade()
                 .error(error)
                 .centerCrop()

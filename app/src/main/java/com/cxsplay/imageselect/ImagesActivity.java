@@ -195,6 +195,7 @@ public class ImagesActivity extends AppCompatActivity {
     /**
      * 利用ContentProvider扫描手机中的所有图片
      */
+
     private void initData() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "当前存储卡不可用！", Toast.LENGTH_SHORT).show();

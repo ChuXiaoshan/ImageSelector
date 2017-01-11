@@ -18,7 +18,7 @@
             android:theme="@style/DarknessBg"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.cxsplay.imageselect.demo.MainActivity"
             android:label="ImageSelectDemo"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -27,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
     </application>
 
 </manifest>

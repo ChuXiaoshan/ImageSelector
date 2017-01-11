@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ImageSelect.iml" filepath="$PROJECT_DIR$/ImageSelect.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/croplib/croplib.iml" filepath="$PROJECT_DIR$/croplib/croplib.iml" />
     </modules>
   </component>
 </project>
