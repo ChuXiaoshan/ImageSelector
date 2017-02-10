@@ -39,17 +39,27 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (requestCode == REQUEST_CODE_SINGLE_IMAGE) {
+
+            bind.rvSelectImages.setVisibility(View.GONE);
+            bind.ivShow1.setVisibility(View.VISIBLE);
             String path = data.getStringExtra(ImagesActivity.RETURN_KEY);
             CustomBinder.loadImage(bind.ivShow1, path, null, null);
         } else if (requestCode == REQUEST_CODE_MULIT_IMAGE) {
+
+            bind.rvSelectImages.setVisibility(View.VISIBLE);
+            bind.ivShow1.setVisibility(View.GONE);
             ArrayList<String> images = data.getStringArrayListExtra(ImagesActivity.RETURN_KEY);
             bind.rvSelectImages.setAdapter(new SelectedImageAdapter(this, images));
         } else if (requestCode == REQUEST_CODE_CROP_IMAGE) {
+
+            bind.rvSelectImages.setVisibility(View.GONE);
+            bind.ivShow1.setVisibility(View.VISIBLE);
             String path = data.getStringExtra(ImagesActivity.RETURN_KEY);
             Uri uri = Uri.fromFile(new File(path));
             Uri destination = Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + ".jpg"));
             Crop.of(uri, destination).asSquare().start(this);
         } else {
+
             CustomBinder.loadImage(bind.ivShow1, Crop.getOutput(data), null, null);
         }
     }
@@ -60,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ImagesActivity.class);
             intent.putExtra(ImagesActivity.SELECT_TYPE, ImagesActivity.TYPE_SINGLE);
             startActivityForResult(intent, REQUEST_CODE_SINGLE_IMAGE);
-            bind.rvSelectImages.setVisibility(View.GONE);
-            bind.ivShow1.setVisibility(View.VISIBLE);
         }
 
         public void imageMulit(View v) {
@@ -69,16 +77,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(ImagesActivity.SELECT_TYPE, ImagesActivity.TYPE_MULIT);
             intent.putExtra(ImagesActivity.SELECT_LIMIT, 9);
             startActivityForResult(intent, REQUEST_CODE_MULIT_IMAGE);
-            bind.rvSelectImages.setVisibility(View.VISIBLE);
-            bind.ivShow1.setVisibility(View.GONE);
         }
 
         public void imageCrop(View v) {
             Intent intent = new Intent(MainActivity.this, ImagesActivity.class);
-            intent.putExtra(ImagesActivity.SELECT_TYPE, ImagesActivity.TYPE_SINGLE);
+            intent.putExtra(ImagesActivity.SELECT_TYPE, ImagesActivity.TYPE_CROP);
             startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
-            bind.rvSelectImages.setVisibility(View.GONE);
-            bind.ivShow1.setVisibility(View.VISIBLE);
         }
     }
 }

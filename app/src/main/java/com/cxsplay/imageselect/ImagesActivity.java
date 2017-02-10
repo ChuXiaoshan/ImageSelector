@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.cxsplay.imageselect.databinding.ActivityImagesBinding;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -53,9 +55,9 @@ public class ImagesActivity extends AppCompatActivity {
 
     public static final int TYPE_CROP = 2;
 
-    private int selectLimit = 9;
+    private int selectLimit;
 
-    private int type = 0;
+    private int type;
 
     private ArrayList<String> selectedImages;
 
@@ -73,15 +75,7 @@ public class ImagesActivity extends AppCompatActivity {
 
     private ImageAdapter adapter;
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == DATA_LOADED) {
-                refreshData(listAllImage, "", "所有图片");
-                progressDialog.dismiss();
-            }
-        }
-    };
+    private MyHandler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +94,17 @@ public class ImagesActivity extends AppCompatActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
         }
+
+        mHandler = new MyHandler(this);
 
         type = getIntent().getIntExtra(SELECT_TYPE, 0);
         if (type == TYPE_SINGLE) {
             bind.tvOk.setVisibility(View.GONE);
         }
+
+        selectLimit = getIntent().getIntExtra(SELECT_LIMIT, 9);
 
         listAllImage = new ArrayList<>();
         listFolder = new ArrayList<>();
@@ -115,8 +114,10 @@ public class ImagesActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
             public void onImageViewClick(String path) {
-                finishType(path);
-                Toast.makeText(ImagesActivity.this, "onImageViewClick", Toast.LENGTH_SHORT).show();
+                if (type != TYPE_MULIT) {
+                    finishType(path);
+                }
+                //Toast.makeText(ImagesActivity.this, "path-->" + path, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -146,6 +147,16 @@ public class ImagesActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * 返回一张图片路径
      *
@@ -157,6 +168,8 @@ public class ImagesActivity extends AppCompatActivity {
             intent.putExtra(RETURN_KEY, path);
         } else if (type == TYPE_MULIT) {
             intent.putStringArrayListExtra(RETURN_KEY, selectedImages);
+        } else if (type == TYPE_CROP) {
+            intent.putExtra(RETURN_KEY, path);
         }
         setResult(RESULT_OK, intent);
         finish();
@@ -195,7 +208,6 @@ public class ImagesActivity extends AppCompatActivity {
     /**
      * 利用ContentProvider扫描手机中的所有图片
      */
-
     private void initData() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "当前存储卡不可用！", Toast.LENGTH_SHORT).show();
@@ -308,6 +320,7 @@ public class ImagesActivity extends AppCompatActivity {
         }
     }
 
+    //点击事件
     public class ImagesHandler {
 
         public void showBottomPop(View v) {
@@ -317,8 +330,29 @@ public class ImagesActivity extends AppCompatActivity {
             bpFragment.show(getSupportFragmentManager(), bpFragment.getTag());
         }
 
+        //OK button onClick.
         public void okClick(View v) {
+            if (selectedImages == null || selectedImages.size() == 0) {
+                return;
+            }
             finishType("");
+        }
+    }
+
+    private static class MyHandler extends Handler {
+        WeakReference<ImagesActivity> mWeakReferenceActivity;
+
+        MyHandler(ImagesActivity imagesActivity) {
+            mWeakReferenceActivity = new WeakReference<>(imagesActivity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == DATA_LOADED) {
+                ImagesActivity imagesActivity = mWeakReferenceActivity.get();
+                imagesActivity.refreshData(imagesActivity.listAllImage, "", "所有图片");
+                imagesActivity.progressDialog.dismiss();
+            }
         }
     }
 }

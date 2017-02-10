@@ -89,7 +89,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
             super(itemView);
             bind = DataBindingUtil.bind(itemView);
             bind.setHandler(new ItemHandler());
-            if (selectType == 0) {
+            if (selectType == ImagesActivity.TYPE_CROP ||
+                    selectType == ImagesActivity.TYPE_SINGLE) {
                 bind.cbImage.setVisibility(View.GONE);
             }
             bind.setPath(path);

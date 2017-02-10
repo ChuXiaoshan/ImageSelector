@@ -42,7 +42,7 @@
                 android:background="?android:selectableItemBackground"
                 android:onClick="@{handler::okClick}"
                 android:padding="6dp"
-                android:text="确定"
+                android:text="确定(0)"
                 android:textColor="@color/grey500"/>
         </RelativeLayout>
 
