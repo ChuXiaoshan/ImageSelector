@@ -12,3 +12,6 @@ gradle.properties
 /build
 /captures
 .externalNativeBuild
+libs/
+src/main/res/drawable-v21/
+src/main/res/layout/item_empty.xml

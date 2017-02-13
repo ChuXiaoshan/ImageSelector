@@ -51,9 +51,7 @@
             android:id="@+id/rv_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layoutManager="GridLayoutManager"
-            app:spanCount="3"/>
+            android:layout_marginTop="?attr/actionBarSize"/>
 
         <RelativeLayout
             android:id="@+id/rl_image_bottom"

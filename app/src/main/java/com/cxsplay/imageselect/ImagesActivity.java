@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,6 +111,11 @@ public class ImagesActivity extends AppCompatActivity {
         listFolder = new ArrayList<>();
         selectedImages = new ArrayList<>();
         adapter = new ImageAdapter(ImagesActivity.this, type);
+
+        GridLayoutManager lm = new GridLayoutManager(this, 3);
+        bind.rvImages.setLayoutManager(lm);
+
+
         bind.rvImages.setAdapter(adapter);
         adapter.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
             @Override
@@ -117,7 +123,6 @@ public class ImagesActivity extends AppCompatActivity {
                 if (type != TYPE_MULIT) {
                     finishType(path);
                 }
-                //Toast.makeText(ImagesActivity.this, "path-->" + path, Toast.LENGTH_SHORT).show();
             }
 
             @Override
